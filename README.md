@@ -1,0 +1,1 @@
+Hello! My name is Dmytro. After finishing this course I'm expecting to become Junior/Trainee Java developer.

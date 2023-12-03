@@ -1,0 +1,10 @@
+INFO: Something happened in info 1
+DEBUG: Something happened in debug 1
+INFO: Something happened in info 2
+DEBUG: Something happened in debug 2
+INFO: Something happened in info 3
+DEBUG: Something happened in debug 3
+DEBUG: Something happened in debug 4
+DEBUG: Something happened in debug 5
+INFO: Something happened in info 4
+DEBUG: Something happened in debug 6

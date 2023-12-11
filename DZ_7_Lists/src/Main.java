@@ -6,21 +6,25 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         // Task 1
-        countOccurence(generateRandomWords(), "Dragon");
-        // Task 2
+        System.out.printf("Кількість повторень: %d%n", countOccurence(generateRandomWords(), "Dragon"));
+        System.out.println("-".repeat(100));
+        // Task 2   convert array to list
         String[] stringArr = {"Apple", "Chair", "Dragon", "Fire", "Banana"};
-        toList(stringArr);
+        System.out.println(toList(stringArr));
         Integer[] intArr = {1, 2, 3, 4, 5};
-        toList(intArr);
-        // Task 3
+        System.out.println(toList(intArr));
+        System.out.println("-".repeat(100));
+        // Task 3   Find unique numbers
         List<Integer> task3List = new ArrayList<>(List.of(9,9,2,2,2,5,5,6,3,5,5,4,4,1,1,8));
-        findUnique(task3List);
-        // Task 4
+        System.out.println(findUnique(task3List));
+        System.out.println("-".repeat(100));
+        // Task 4   **
         List<String> task4List = generateRandomWords();
-        calcOccurence(task4List);
-        // Task 5
-        findOccurence(task4List);
-
+        printMap(calcOccurence(task4List));
+        System.out.println("-".repeat(100));
+        // Task 4   ***
+        System.out.println(findOccurence(task4List));
+        System.out.println("-".repeat(100));
 
         // Last tasks
         PhoneDirectory phoneDirectory = new PhoneDirectory();
@@ -36,12 +40,12 @@ public class Main {
         System.out.println(phoneDirectory.findAll("Dmytro"));
     }
 
-    public static void countOccurence(List<String> list, String str) {
+    public static int countOccurence(List<String> list, String str) {
         int count = 0;
         for (String s : list)
             if (str.equals(s))
                 count++;
-        System.out.printf("Кількість повторень: %d%n", count);
+        return count;
     }
     public static List<String> generateRandomWords() {
         List<String> list = new ArrayList<>();
@@ -55,10 +59,10 @@ public class Main {
         }
         return list;
     }
-    public static <T> void toList(T[] arr) {
-        System.out.println(List.of(arr));
+    public static <T> List<T> toList(T[] arr) {
+        return List.of(arr);
     }
-    public static  void findUnique(List<Integer> originalList) {
+    public static List<Integer> findUnique(List<Integer> originalList) {
         List<Integer> resultList = new ArrayList<>();
         Collections.sort(originalList);
         int size = originalList.size();
@@ -78,37 +82,37 @@ public class Main {
             else
                 resultList.add(currentNum);
         }
-        System.out.println(resultList);
+        return resultList;
     }
-    public static void calcOccurence(List<String> list) {
+    public static Map<String, Integer> calcOccurence(List<String> list) {
         Map<String, Integer> wordsNumber = new HashMap<>();
         for (String s : list) {
             wordsNumber.put(s, wordsNumber.getOrDefault(s, 0) + 1);
         }
-        for (Map.Entry<String, Integer> entry : wordsNumber.entrySet()) {
-            System.out.printf("%s: %d,%n", entry.getKey(), entry.getValue());
-        }
+        return wordsNumber;
     }
     public static List<WordOccurence> findOccurence(List<String> list) {
-//        Map<String, Integer> wordsNumber = new HashMap<>();
-//        for (String s : list)
-//            wordsNumber.put(s, wordsNumber.getOrDefault(s, 0) + 1);
-//
-//        Set<Map.Entry<String, Integer>> listWordsNumber = wordsNumber.entrySet();
-//        for (Map.Entry<String, Integer> entry : listWordsNumber)
-//            System.out.printf("{Name: %s, occurence: %d}%n", entry.getKey(), entry.getValue());
         List<WordOccurence> wordOccurences = new ArrayList<>();
         for (String s : list) {
             int indexOfExistence = checkExistence(wordOccurences, s);
-            if (indexOfExistence >= 0)
-                wordOccurences.get(indexOfExistence).setNum();
+            if (indexOfExistence >= 0) {
+                int newNum = wordOccurences.get(indexOfExistence).getNum() + 1;
+                wordOccurences.get(indexOfExistence).setNum(newNum);
+            }
+            else
+                wordOccurences.add(new WordOccurence(s));
         }
+        return wordOccurences;
     }
-
     public static int checkExistence(List<WordOccurence> wordOccurences, String s) {
         for (int i = 0; i < wordOccurences.size(); i++)
             if (s.equals(wordOccurences.get(i).getName()))
                 return i;
         return -1;
+    }
+    public static void printMap(Map<String, Integer> map) {
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            System.out.printf("%s: %d,%n", entry.getKey(), entry.getValue());
+        }
     }
 }

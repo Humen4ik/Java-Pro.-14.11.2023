@@ -1,6 +1,9 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Server {
     private ServerSocket serverSocket;
@@ -10,6 +13,7 @@ public class Server {
 
     public Server(int port) {
         try {
+            boolean russianDetector = false;
             serverSocket = new ServerSocket(port);
             System.out.println("Чекаємо клієнта");
             socket = serverSocket.accept();
@@ -26,9 +30,27 @@ public class Server {
             do {
                 printWriter.println("Уведіть значення / натисніть 'Enter', щоб закінчити : ");
                 str = reader.readLine();
-                System.out.println(str);
-
+                if (containsRussianLetters(str) && russianDetector) {
+                    System.out.println("Москаля ідентифіковано, завершення програми!");
+                    printWriter.println("exit");
+                    break;
+                }
+                else if (containsRussianLetters(str) && !russianDetector) {
+                    russianDetector = true;
+                    printWriter.println("Що таке паляниця?");
+                    String answer = reader.readLine().toLowerCase();
+                    if (answer.contains("хліб")) {
+                        printWriter.println("На цей раз тобі пощастило, що ти можеш сказати в своє виправдання?");
+                        System.out.println(reader.readLine());
+                    } else {
+                        System.out.println("Москаля ідентифіковано, завершення програми!");
+                        printWriter.println("");
+                        break;
+                    }
+                } else
+                    System.out.println(str);
             } while (!str.isEmpty());
+
             System.out.println("Виконання закінчено");
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,6 +66,12 @@ public class Server {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private boolean containsRussianLetters(String str) {
+        Pattern pattern = Pattern.compile("[ЁёъыЭэ]+");
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
     }
 
     public static void main(String args[]) {

@@ -5,21 +5,31 @@ import java.net.Socket;
 public class Server {
     private ServerSocket serverSocket;
     private BufferedReader reader;
+    private PrintWriter printWriter;
     private Socket socket;
 
     public Server(int port) {
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println("Waiting for a client");
+            System.out.println("Чекаємо клієнта");
             socket = serverSocket.accept();
-            System.out.println("Client accepted");
+            System.out.println("Клієнта прийнято");
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            String str;
-            while(!(str = reader.readLine()).equalsIgnoreCase("")) {
+            printWriter = new PrintWriter(socket.getOutputStream(), true);
+            String str = "";
+//            while(!(str = reader.readLine()).equalsIgnoreCase("")) {
+//                if (str.equalsIgnoreCase("test")) {
+//                    printWriter.println("Що таке паляниця?");
+//                }
+//                System.out.println(str);
+//            }
+            do {
+                printWriter.println("Уведіть значення / натисніть 'Enter', щоб закінчити");
+                str = reader.readLine();
                 System.out.println(str);
-            }
-            System.out.println("Execution finished");
+
+            } while (!str.isEmpty());
+            System.out.println("Виконання закінчено");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

@@ -4,7 +4,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Client {
     private Socket socket;
@@ -65,7 +68,9 @@ public class Client {
     }
 
     private boolean containsRussianLetters(String str) {
-        return str.matches(".*[ЁёъыЭэ]+");
+        Pattern pattern = Pattern.compile("[ЁёъыЭэ]+");
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
     }
 
     public static void main(String[] args) {

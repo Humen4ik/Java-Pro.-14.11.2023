@@ -24,7 +24,7 @@ public class Server {
 //                System.out.println(str);
 //            }
             do {
-                printWriter.println("Уведіть значення / натисніть 'Enter', щоб закінчити");
+                printWriter.println("Уведіть значення / натисніть 'Enter', щоб закінчити : ");
                 str = reader.readLine();
                 System.out.println(str);
 

@@ -26,4 +26,3 @@ create table if not exists Lesson_Schedule(
 	schedule_id int references Schedule(id),
 	lesson_id int references Lesson(id)
 );
-

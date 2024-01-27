@@ -18,36 +18,51 @@ public class Client {
             scanner = new Scanner(System.in);
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            String str;
-            String serverAnswer;
-            do {
-                serverAnswer = reader.readLine();
-                if (serverAnswer.equals("exit"))
-                    break;
-                System.out.println(serverAnswer);
-                str = scanner.nextLine();
-                printWriter.println(str);
-            } while (!str.equals(""));
-
-            System.out.println("Виконання закінчено");
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (socket != null && !socket.isClosed())
-                    socket.close();
-                if (scanner != null)
-                    scanner.close();
-                if (printWriter != null)
-                    printWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
+            closeResources(socket, reader, printWriter);
+        }
+    }
+
+    public void listenForMessages() {
+        new Thread(() -> {
+            while (socket.isConnected()) {
+                try {
+                    String message = reader.readLine();
+                    System.out.println("SERVER: " + message);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        }).start();
+    }
+
+    public void writeMessages() {
+        Scanner scanner = new Scanner(System.in);
+        String messagePrefix = "CLIENT: ";
+        while (socket.isConnected()) {
+            String message = scanner.nextLine();
+            printWriter.println(messagePrefix + message);
+        }
+    }
+
+    private void closeResources(Socket socket, BufferedReader reader, PrintWriter writer) {
+        try {
+            if (socket != null && !socket.isClosed())
+                socket.close();
+            if (reader != null)
+                reader.close();
+            if (writer != null)
+                writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public static void main(String[] args) {
         Client client = new Client("localhost", 8081);
+        client.listenForMessages();
+        client.writeMessages();
     }
 }

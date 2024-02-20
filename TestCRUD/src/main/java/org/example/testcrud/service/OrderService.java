@@ -8,6 +8,5 @@ public interface OrderService {
     Order getById(int id);
     List<Order> getAll();
     void save(Order order);
-    void update(Order order, int id);
     void delete(int id);
 }

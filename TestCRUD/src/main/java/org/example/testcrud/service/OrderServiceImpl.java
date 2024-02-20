@@ -1,41 +1,53 @@
 package org.example.testcrud.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.testcrud.dto.Order;
+import org.example.testcrud.repository.OrderRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService{
-    private final List<Order> orderList = new ArrayList<>();
+
+    private final OrderRepo orderRepo;
+
     @Override
     public Order getById(int id) {
-        return orderList.stream()
-                .filter(order -> order.getId() == id)
-                .findFirst().get();
+        return orderRepo.selectById(id);
     }
 
     @Override
     public List<Order> getAll() {
-        return orderList;
+        return orderRepo.selectAll();
     }
 
     @Override
     public void save(Order order) {
-        orderList.add(order);
-    }
-
-    @Override
-    public void update(Order order, int id) {
-        Order oldOrder = orderList.get(id - 1);
-        oldOrder.setCost(order.getCost());
-        oldOrder.setDate(order.getDate());
-        oldOrder.setProductList(order.getProductList());
+        orderRepo.save(order);
     }
 
     @Override
     public void delete(int id) {
-        orderList.remove(id - 1);
+        orderRepo.delete(id);
     }
+
+//    @Override
+//    public void save(Order order) {
+//        orderList.add(order);
+//    }
+//
+//    @Override
+//    public void update(Order order, int id) {
+//        Order oldOrder = orderList.get(id - 1);
+//        oldOrder.setCost(order.getCost());
+//        oldOrder.setDate(order.getDate());
+//        oldOrder.setProductList(order.getProductList());
+//    }
+//
+//    @Override
+//    public void delete(int id) {
+//        orderList.remove(id - 1);
+//    }
 }

@@ -1,5 +1,7 @@
 package org.example.testcrud.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -11,6 +13,8 @@ import java.util.List;
 @Component
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class Order {
 
     private static int orderIdCounter = 0;
@@ -35,6 +39,4 @@ public class Order {
         this.cost = products.stream().mapToDouble(Product::getCost).sum();
         productList.addAll(products);
     }
-
-
 }

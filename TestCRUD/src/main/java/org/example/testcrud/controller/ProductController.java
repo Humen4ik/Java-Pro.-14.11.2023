@@ -1,6 +1,7 @@
 package org.example.testcrud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.testcrud.controller.response.ApiResponse;
 import org.example.testcrud.dto.Product;
 import org.example.testcrud.service.ProductService;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +16,29 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping()
-    public List<Product> getAllProducts() {
-        return productService.getAll();
+    public ApiResponse<List<Product>> getAllProducts() {
+        ApiResponse<List<Product>> apiResponse = new ApiResponse<>();
+        List<Product> products = productService.getAll();
+        if(!products.isEmpty()) {
+            apiResponse.setBody(products);
+            apiResponse.setStatus(true);
+        } else {
+            apiResponse.getMessages().add("Some error!");
+        }
+        return apiResponse;
     }
 
     @GetMapping("/{productId}")
-    public Product getProductById(@PathVariable("productId") Integer id) {
-        return productService.getById(id);
+    public ApiResponse<Product> getProductById(@PathVariable("productId") Integer id) {
+        ApiResponse<Product> apiResponse = new ApiResponse<>();
+        Product product = productService.getById(id);
+        if(product != null) {
+            apiResponse.setBody(product);
+            apiResponse.setStatus(true);
+        } else {
+            apiResponse.getMessages().add("Some error!");
+        }
+        return apiResponse;
     }
 
     @PostMapping()

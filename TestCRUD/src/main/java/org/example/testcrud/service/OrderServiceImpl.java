@@ -33,21 +33,9 @@ public class OrderServiceImpl implements OrderService{
         orderRepo.delete(id);
     }
 
-//    @Override
-//    public void save(Order order) {
-//        orderList.add(order);
-//    }
-//
-//    @Override
-//    public void update(Order order, int id) {
-//        Order oldOrder = orderList.get(id - 1);
-//        oldOrder.setCost(order.getCost());
-//        oldOrder.setDate(order.getDate());
-//        oldOrder.setProductList(order.getProductList());
-//    }
-//
-//    @Override
-//    public void delete(int id) {
-//        orderList.remove(id - 1);
-//    }
+    @Override
+    public void update(int id, Order order) {
+        orderRepo.update(id, order);
+    }
+
 }

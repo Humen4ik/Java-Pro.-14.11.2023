@@ -6,6 +6,7 @@ import org.example.testcrud.mapper.OrderMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class OrderRepo implements repo<Order> {
     private final String SELECT_ALL = "SELECT * FROM orders";
     private final String SAVE = "INSERT INTO orders(id, date, cost) VALUES (?, ?, ?)";
     private final String DELETE = "DELETE FROM orders WHERE id = ";
+    private final String UPDATE = "UPDATE orders SET ";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -40,6 +42,23 @@ public class OrderRepo implements repo<Order> {
 
     @Override
     public void update(int id, Order order) {
+        StringBuilder sqlBuilder = new StringBuilder(UPDATE);
+        List<Object> args = new ArrayList<>();
 
+        if (order.getDate() != null) {
+            sqlBuilder.append("date = ?, ");
+            args.add(order.getDate());
+        }
+
+        if (order.getCost() != 0.0) {
+            sqlBuilder.append("cost = ?, ");
+            args.add(order.getCost());
+        }
+
+        if (args.isEmpty())
+            return;
+
+        sqlBuilder.replace(sqlBuilder.length() - 2, sqlBuilder.length(), " WHERE id = ?");
+        jdbcTemplate.update(sqlBuilder.toString(), args.toArray());
     }
 }

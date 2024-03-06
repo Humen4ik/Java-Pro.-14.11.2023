@@ -1,12 +1,16 @@
 package org.example.testcrud.service;
 
-import org.example.testcrud.dto.Product;
+import org.example.testcrud.dto.ProductDto;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 public interface ProductService {
-    Product getById(int id);
-    List<Product> getAll();
-    void save(Product order);
+    ProductDto getById(int id);
+    List<ProductDto> getAll();
+    void save(ProductDto order);
+    void saveAll(List<ProductDto> products);
     void delete(int id);
-    void update(int id, Product product);
+    void update(int id, ProductDto product);
+    List<ProductDto> getProductsInPage(Pageable pageable);
 }

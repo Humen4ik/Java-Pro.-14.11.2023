@@ -10,9 +10,14 @@ create table if not exists products (
     cost NUMERIC
 );
 
-create table if not exists orders_products (
-    order_id int references orders(id),
-    product_id int references products(id),
-    quantity int,
-    primary key (order_id, product_id)
-);
+-- create table if not exists orders_products (
+--     order_id int references orders(id),
+--     product_id int references products(id),
+--     quantity int,
+--     primary key (order_id, product_id)
+-- );
+
+
+drop table if exists orders_products;
+drop table if exists orders;
+drop table if exists products;

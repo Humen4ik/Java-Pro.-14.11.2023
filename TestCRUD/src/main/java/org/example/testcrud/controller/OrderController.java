@@ -1,9 +1,11 @@
 package org.example.testcrud.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.testcrud.dto.Order;
-import org.example.testcrud.dto.Product;
+import org.example.testcrud.dto.OrderDto;
 import org.example.testcrud.service.OrderService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,18 +18,18 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping()
-    public List<Order> getAllOrders() {
+    public List<OrderDto> getAllOrders() {
         return orderService.getAll();
     }
 
     @GetMapping("/{orderId}")
-    public Order getOrderById(@PathVariable("orderId") Integer id) {
+    public OrderDto getOrderById(@PathVariable("orderId") Integer id) {
         return orderService.getById(id);
     }
 
     @PostMapping()
-    public void createNewOrder(@RequestBody Order order) {
-        orderService.save(order);
+    public void createNewOrder(@RequestBody OrderDto orderDto) {
+        orderService.save(orderDto);
     }
 
     @DeleteMapping("/{orderId}")
@@ -36,8 +38,19 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}")
-    public void update(@PathVariable("orderId") Integer id, @RequestBody Order order) {
-        orderService.update(id, order);
+    public void update(@PathVariable("orderId") Integer id, @RequestBody OrderDto orderDto) {
+        orderService.update(id, orderDto);
+    }
+
+    @GetMapping("/pagination")
+    public List<OrderDto> ordersPage(@RequestParam(defaultValue = "0") int pageNo,
+                                     @RequestParam(defaultValue = "2") int itemsNo,
+                                     @RequestParam(defaultValue = "id") String sortBy,
+                                     @RequestParam(defaultValue = "ASC") String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo, itemsNo, sort);
+        List<OrderDto> orderList = orderService.getOrdersPage(pageable);
+        return orderList;
     }
 
 }

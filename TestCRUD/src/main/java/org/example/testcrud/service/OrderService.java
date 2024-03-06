@@ -1,13 +1,16 @@
 package org.example.testcrud.service;
 
-import org.example.testcrud.dto.Order;
+import org.example.testcrud.dto.OrderDto;
+import org.example.testcrud.model.Order;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface OrderService {
-    Order getById(int id);
-    List<Order> getAll();
-    void save(Order order);
+    OrderDto getById(int id);
+    List<OrderDto> getAll();
+    void save(OrderDto order);
     void delete(int id);
-    void update(int id, Order order);
+    void update(int id, OrderDto order);
+    List<OrderDto> getOrdersPage(Pageable pageable);
 }

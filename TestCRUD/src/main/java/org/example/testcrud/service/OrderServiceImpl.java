@@ -1,7 +1,6 @@
 package org.example.testcrud.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.testcrud.controller.OrderController;
 import org.example.testcrud.converter.OrderConverter;
 import org.example.testcrud.dto.OrderDto;
 import org.example.testcrud.model.Order;
@@ -47,7 +46,6 @@ public class OrderServiceImpl implements OrderService{
     public void update(int id, OrderDto orderDto) {
         Order oldOrder = orderRepo.findById(id).orElseThrow();
         Order newOrder = orderConverter.toModel(orderDto, oldOrder);
-        System.out.println(newOrder);
         orderRepo.save(newOrder);
     }
 

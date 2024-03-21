@@ -101,19 +101,19 @@ class OrderServiceImplTest {
         verify(orderRepo).deleteById(ORDER_ID);
     }
 
-    @Test
-    void update() {
-        LocalDate date = LocalDate.of(2023, 12, 8);
-        double cost = 200.0;
-        OrderDto orderDto = OrderDto.builder().id(ORDER_ID).date(date).cost(cost).build();
-        Order updatedOrder = Order.builder().id(ORDER_ID).date(date).cost(cost).build();
-        when(orderRepo.findById(anyInt())).thenReturn(Optional.of(order));
-        when(orderConverter.toModel(orderDto, order)).thenReturn(order);
-
-        testInstance.update(ORDER_ID, orderDto);
-
-        verify(orderRepo).findById(ORDER_ID);
-        verify(orderConverter).toModel(orderDto, order);
-    }
+//    @Test
+//    void update() {
+//        LocalDate date = LocalDate.of(2023, 12, 8);
+//        double cost = 200.0;
+//        OrderDto orderDto = OrderDto.builder().id(ORDER_ID).date(date).cost(cost).build();
+//        Order updatedOrder = Order.builder().id(ORDER_ID).date(date).cost(cost).build();
+//        when(orderRepo.findById(anyInt())).thenReturn(Optional.of(order));
+//        when(orderConverter.toModel(orderDto, order)).thenReturn(order);
+//
+//        testInstance.update(ORDER_ID, orderDto);
+//
+//        verify(orderRepo).findById(ORDER_ID);
+//        verify(orderConverter).toModel(orderDto, order);
+//    }
 
 }

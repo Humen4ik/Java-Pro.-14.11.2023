@@ -3,6 +3,7 @@ package org.example.testcrud.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.testcrud.dto.OrderDto;
 import org.example.testcrud.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,10 +13,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
-@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
+
+    @Autowired
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping()
     public List<OrderDto> getAllOrders() {

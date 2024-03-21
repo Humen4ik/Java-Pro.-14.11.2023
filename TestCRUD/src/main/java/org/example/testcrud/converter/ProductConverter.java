@@ -30,11 +30,11 @@ public class ProductConverter {
     }
 
     public Product toModel(ProductDto productDto) {
-        return Product.builder()
-                .id(productDto.getId())
-                .name(productDto.getName())
-                .cost(productDto.getCost())
-                .build();
+        Product product = new Product();
+        product.setId(productDto.getId());
+        product.setName(productDto.getName());
+        product.setCost(productDto.getCost());
+        return product;
     }
 
     public Product toModel(ProductDto newDto, Product oldModel) {
@@ -45,14 +45,13 @@ public class ProductConverter {
 
     public List<Product> toModel(List<ProductDto> dtos) {
         List<Product> list = new ArrayList<>();
-        for (ProductDto dto : dtos)
-            list.add(
-                    Product.builder()
-                            .id(dto.getId())
-                            .cost(dto.getCost())
-                            .name(dto.getName())
-                            .build()
-            );
+        for (ProductDto dto : dtos) {
+            Product product = new Product();
+            product.setId(dto.getId());
+            product.setName(dto.getName());
+            product.setCost(dto.getCost());
+            list.add(product);
+        }
         return list;
     }
 }

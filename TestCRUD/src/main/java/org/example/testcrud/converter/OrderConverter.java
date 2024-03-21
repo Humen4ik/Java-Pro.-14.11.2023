@@ -32,11 +32,11 @@ public class OrderConverter {
     }
 
     public Order toModel(OrderDto orderDto) {
-        return Order.builder()
-                .id(orderDto.getId())
-                .cost(orderDto.getCost())
-                .date(orderDto.getDate())
-                .build();
+        Order order = new Order();
+        order.setId(orderDto.getId());
+        order.setCost(orderDto.getCost());
+        order.setDate(orderDto.getDate());
+        return order;
     }
 
     public Order toModel(OrderDto orderDto, Order oldOrder) {

@@ -7,8 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,9 +16,5 @@ public class OrderDto {
     private int id;
     private LocalDate date;
     private double cost;
-//    private List<ProductDto> productList;
-//
-//    {
-//        productList = new ArrayList<>();
-//    }
+    private List<ProductDto> products;
 }

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -17,12 +19,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles(value = "test")
 class OrderServiceImplTest {
 
     private static final int ORDER_ID = 25;
@@ -101,19 +103,22 @@ class OrderServiceImplTest {
         verify(orderRepo).deleteById(ORDER_ID);
     }
 
-//    @Test
-//    void update() {
-//        LocalDate date = LocalDate.of(2023, 12, 8);
-//        double cost = 200.0;
-//        OrderDto orderDto = OrderDto.builder().id(ORDER_ID).date(date).cost(cost).build();
-//        Order updatedOrder = Order.builder().id(ORDER_ID).date(date).cost(cost).build();
-//        when(orderRepo.findById(anyInt())).thenReturn(Optional.of(order));
-//        when(orderConverter.toModel(orderDto, order)).thenReturn(order);
-//
-//        testInstance.update(ORDER_ID, orderDto);
-//
-//        verify(orderRepo).findById(ORDER_ID);
-//        verify(orderConverter).toModel(orderDto, order);
-//    }
+    @Test
+    void update() {
+        LocalDate date = LocalDate.of(2023, 12, 8);
+        double cost = 200.0;
+        OrderDto orderDto = OrderDto.builder().id(ORDER_ID).date(date).cost(cost).build();
+        Order updatedOrder = new Order();
+        updatedOrder.setId(ORDER_ID);
+        updatedOrder.setDate(date);
+        updatedOrder.setCost(cost);
+        when(orderRepo.findById(anyInt())).thenReturn(Optional.of(order));
+        when(orderConverter.toModel(orderDto, order)).thenReturn(order);
+
+        testInstance.update(ORDER_ID, orderDto);
+
+        verify(orderRepo).findById(ORDER_ID);
+        verify(orderConverter).toModel(orderDto, order);
+    }
 
 }

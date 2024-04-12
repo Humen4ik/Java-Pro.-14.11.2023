@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name="orders")
 public class Order {
@@ -17,6 +18,11 @@ public class Order {
     private int id;
     private LocalDate date;
     private double cost;
-    @OneToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "orders_products",
+            joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id")
+    )
     private List<Product> products;
 }

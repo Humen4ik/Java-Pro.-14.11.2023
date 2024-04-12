@@ -3,6 +3,7 @@ package org.example.testcrud.service;
 import lombok.RequiredArgsConstructor;
 import org.example.testcrud.converter.OrderConverter;
 import org.example.testcrud.dto.OrderDto;
+import org.example.testcrud.mappers.OrderMapper;
 import org.example.testcrud.model.Order;
 import org.example.testcrud.repository.OrderRepo;
 import org.springframework.data.domain.Page;
@@ -16,24 +17,24 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService{
 
     private final OrderRepo orderRepo;
+    private final OrderMapper orderMapper;
     private final OrderConverter orderConverter;
 
     @Override
     public OrderDto getById(int id) {
         Order order = orderRepo.findById(id).orElseThrow();
-        return orderConverter.fromModel(order);
+        return orderMapper.orderToOrderDto(order);
     }
 
     @Override
     public List<OrderDto> getAll() {
         Iterable<Order> orders = orderRepo.findAll();
-        List<OrderDto> dtos = orderConverter.fromModel(orders);
-        return dtos;
+        return orderMapper.toOrderDtoList(orders);
     }
 
     @Override
     public void save(OrderDto orderDto) {
-        Order order = orderConverter.toModel(orderDto);
+        Order order = orderMapper.orderDtoToOrder(orderDto);
         orderRepo.save(order);
     }
 
@@ -45,14 +46,14 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public void update(int id, OrderDto orderDto) {
         Order oldOrder = orderRepo.findById(id).orElseThrow();
-        Order newOrder = orderConverter.toModel(orderDto, oldOrder);
-        orderRepo.save(newOrder);
+        orderMapper.orderDtoToOrder(orderDto, oldOrder);
+        orderRepo.save(oldOrder);
     }
 
     @Override
     public List<OrderDto> getOrdersPage(Pageable pageable) {
         Page<Order> orderPage = orderRepo.findAll(pageable);
-        List<OrderDto> orderList = orderConverter.fromModel(orderPage.getContent());
-        return orderList;
+        return orderMapper.toOrderDtoList(orderPage.getContent());
     }
+
 }

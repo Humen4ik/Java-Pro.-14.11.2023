@@ -3,6 +3,7 @@ package org.example.testcrud.service;
 import lombok.RequiredArgsConstructor;
 import org.example.testcrud.converter.ProductConverter;
 import org.example.testcrud.dto.ProductDto;
+import org.example.testcrud.mappers.ProductMapper;
 import org.example.testcrud.model.Product;
 import org.example.testcrud.repository.ProductRepo;
 import org.springframework.data.domain.Page;
@@ -15,28 +16,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
     private final ProductRepo productRepo;
-    private final ProductConverter productConverter;
+    private final ProductMapper productMapper;
     @Override
     public ProductDto getById(int id) {
         Product product = productRepo.findById(id).orElseThrow();
-        return productConverter.fromModel(product);
+        return productMapper.productToProductDto(product);
     }
 
     @Override
     public List<ProductDto> getAll() {
         Iterable<Product> productList = productRepo.findAll();
-        return productConverter.fromModel(productList);
+        return productMapper.toProductDtoList(productList);
     }
 
     @Override
     public void save(ProductDto productDto) {
-        Product product = productConverter.toModel(productDto);
+        Product product = productMapper.productDtoToProduct(productDto);
         productRepo.save(product);
     }
 
     @Override
     public void saveAll(List<ProductDto> productDtos) {
-        List<Product> products = productConverter.toModel(productDtos);
+        List<Product> products = productMapper.toProductList(productDtos);
         productRepo.saveAll(products);
     }
 
@@ -48,14 +49,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void update(int id, ProductDto productDto) {
         Product product = productRepo.findById(id).orElseThrow();
-        Product newProduct = productConverter.toModel(productDto, product);
-        productRepo.save(newProduct);
+        productMapper.productDtoToProduct(productDto, product);
+        productRepo.save(product);
     }
 
     @Override
     public List<ProductDto> getProductsInPage(Pageable pageable) {
         Page<Product> productPage = productRepo.findAll(pageable);
         List<Product> productList = productPage.getContent();
-        return productConverter.fromModel(productList);
+        return productMapper.toProductDtoList(productList);
     }
 }

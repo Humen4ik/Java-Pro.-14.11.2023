@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class OrderControllerMockMvcTest {
+class OrderControllerMockMvcTest {
 
     @Autowired
     private MockMvc mockMvc;

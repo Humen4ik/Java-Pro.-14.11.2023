@@ -1,7 +1,7 @@
 package org.example.testcrud.service;
 
-import org.example.testcrud.converter.OrderConverter;
 import org.example.testcrud.dto.OrderDto;
+import org.example.testcrud.mappers.OrderMapper;
 import org.example.testcrud.model.Order;
 import org.example.testcrud.repository.OrderRepo;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
@@ -36,7 +35,7 @@ class OrderServiceImplTest {
     private OrderRepo orderRepo;
 
     @Mock
-    private OrderConverter orderConverter;
+    private OrderMapper orderMapper;
 
     @Mock
     private Order order;
@@ -58,12 +57,12 @@ class OrderServiceImplTest {
     @Test
     void shouldReturnOrderById() {
         when(orderRepo.findById(anyInt())).thenReturn(Optional.of(order));
-        when(orderConverter.fromModel(order)).thenReturn(orderDto);
+        when(orderMapper.orderToOrderDto(order)).thenReturn(orderDto);
 
         OrderDto testDto = testInstance.getById(ORDER_ID);
 
         verify(orderRepo).findById(ORDER_ID);
-        verify(orderConverter).fromModel(order);
+        verify(orderMapper).orderToOrderDto(order);
         assertNotNull(testDto);
         assertEquals(ORDER_ID, testDto.getId());
     }
@@ -75,12 +74,12 @@ class OrderServiceImplTest {
         OrderDto orderDto3 = OrderDto.builder().id(17).date(LocalDate.of(2022, 3, 15)).cost(300.0).build();
         List<OrderDto> dataList = Arrays.asList(orderDto1, orderDto2, orderDto3);
         when(orderRepo.findAll()).thenReturn(orders);
-        when(orderConverter.fromModel(orders)).thenReturn(dataList);
+        when(orderMapper.toOrderDtoList(orders)).thenReturn(dataList);
 
         List<OrderDto> resultList = testInstance.getAll();
 
         verify(orderRepo).findAll();
-        verify(orderConverter).fromModel(orders);
+        verify(orderMapper).toOrderDtoList(orders);
         assertNotNull(resultList);
         assertEquals(3, resultList.size());
     }
@@ -88,11 +87,11 @@ class OrderServiceImplTest {
     @Test
     void save() {
         OrderDto orderDto = OrderDto.builder().id(ORDER_ID).date(LocalDate.of(2023, 12, 8)).cost(200.0).build();
-        when(orderConverter.toModel(orderDto)).thenReturn(order);
+        when(orderMapper.orderDtoToOrder(orderDto)).thenReturn(order);
 
         testInstance.save(orderDto);
 
-        verify(orderConverter).toModel(orderDto);
+        verify(orderMapper).orderDtoToOrder(orderDto);
         verify(orderRepo).save(order);
     }
 
@@ -113,12 +112,11 @@ class OrderServiceImplTest {
         updatedOrder.setDate(date);
         updatedOrder.setCost(cost);
         when(orderRepo.findById(anyInt())).thenReturn(Optional.of(order));
-        when(orderConverter.toModel(orderDto, order)).thenReturn(order);
 
         testInstance.update(ORDER_ID, orderDto);
 
         verify(orderRepo).findById(ORDER_ID);
-        verify(orderConverter).toModel(orderDto, order);
+        verify(orderMapper).orderDtoToOrder(orderDto, order);
     }
 
 }

@@ -3,29 +3,25 @@ package org.example.testcrud.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.testcrud.dto.OrderDto;
 import org.example.testcrud.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
 
-    @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
-
     @GetMapping()
-    public List<OrderDto> getAllOrders() {
-        return orderService.getAll();
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        return new ResponseEntity<>(orderService.getAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{orderId}")
@@ -34,11 +30,13 @@ public class OrderController {
     }
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     public void createNewOrder(@RequestBody OrderDto orderDto) {
         orderService.save(orderDto);
     }
 
     @DeleteMapping("/{orderId}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteOrder(@PathVariable("orderId") Integer id) {
         orderService.delete(id);
     }
